@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('RawData', RawDataController::class);
+Route::put('/raw-data/{id}', [RawDataController::class, 'update']);

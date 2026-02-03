@@ -16,7 +16,7 @@ class RawDataController extends Controller
     public function index()
     {
         //
-        $data = RawData::paginate(10000);
+        $data = RawData::paginate(100);
         return $data;
     }
 
@@ -56,14 +56,38 @@ class RawDataController extends Controller
         //
         return RawData::findOrFail($id)->toResourceCollection(ScoreResource::class);
         return new RawDataResource($rawData);
+
+        $data = RawData::find($id);
+
+    if (!$data) {
+        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+    }
+    return new RawDataResource($data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+public function update(Request $request, string $id)
     {
-        //
+        $data = RawData::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'IdBundesland' => 'sometimes|integer',
+            'Bundesland'   => 'sometimes|string',
+            'Landkreis'    => 'sometimes|string',
+            'Altersgruppe' => 'sometimes|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Update langsung menggunakan instance model agar lebih "Eloquent"
+        $data->update($request->all());
+
+        return (new RawDataResource($data))
+            ->additional(['message' => 'Data berhasil diperbarui']);
     }
 
     /**
@@ -72,5 +96,12 @@ class RawDataController extends Controller
     public function destroy(string $id)
     {
         //
+    $data = RawData::find($id);
+
+    if (!$data) {
+        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+    }
+    $data->delete();
+    return response()->json(['message' => 'Data berhasil dihapus'], 200);
     }
 }

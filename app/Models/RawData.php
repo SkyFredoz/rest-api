@@ -12,4 +12,11 @@ class RawData extends Model
     protected $collection = 'raw_data';
     protected $guarded = [];
     protected $primaryKey = '_id';
+    // protected $keyType = 'string';
+    // protected $fillable = [
+    //     'IdBundesland', 
+    //     'Bundesland', 
+    //     'Landkreis', 
+    //     'Altersgruppe'
+    // ];
 }
