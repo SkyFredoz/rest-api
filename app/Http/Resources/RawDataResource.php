@@ -7,6 +7,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class RawDataResource extends JsonResource
 {
+
+    public $status;
+    public $message;
+
+    public function __construct($resource, $status = 'success', $message = '')
+    {
+        parent::__construct($resource);
+        $this->status = $status;
+        $this->message = $message;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -15,10 +26,9 @@ class RawDataResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-        'id' => (string )$this->_id,
-        'Bundesland' => $this->Bundesland,
-        'Landkreis' => $this->Landkreis,
-        'Altersgruppe' => $this->Altersgruppe
+            'status' => $this->status,
+            'message' => $this->message,
+            'data' => $this->resource,
         ];
     }
 }

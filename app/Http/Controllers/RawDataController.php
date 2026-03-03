@@ -13,6 +13,8 @@ class RawDataController extends Controller
     public function index()
     {
         //
+        $path = storage_path('app/public/raw_data.json');
+        $json = json_decode(file_get_contents($path), true);
         $data = RawData::paginate(10000);
         return $data;
     }
